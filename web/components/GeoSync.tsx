@@ -1,94 +1,102 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
-import { MapPin } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Users, MapPin, Zap } from 'lucide-react';
 
-// Dynamically import MapUI bypassing SSR
-const MapUI = dynamic(() => import('./MapUI'), {
-  ssr: false,
-  loading: () => (
-    <div style={{ 
-      height: '450px', 
-      width: '100%', 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      background: 'var(--color-bg-alt)',
-      color: 'var(--color-text-muted)' 
-    }}>
-      Loading local map...
-    </div>
-  )
-});
+import { getActiveVolunteerCount } from '@/lib/api';
 
 export default function GeoSync() {
+  const [count, setCount] = useState<number | '...'>('...');
+
+  // Live DB Fetch
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const data = await getActiveVolunteerCount();
+        setCount(data.total);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    
+    fetchCount();
+    const interval = setInterval(fetchCount, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section id="map" style={{ padding: '6rem 1.5rem', background: 'var(--color-bg-alt)' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        
-        {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <span style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              background: 'rgba(37, 99, 235, 0.1)',
-              color: 'var(--color-primary-light)',
-              padding: '0.4rem 1rem',
-              borderRadius: '99px',
-              fontSize: '0.8rem',
-              fontWeight: 700,
-              letterSpacing: '0.05em',
-              textTransform: 'uppercase',
-              marginBottom: '1rem',
-            }}>
-              <MapPin size={14} /> LIVE COVERAGE
-            </span>
-            <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3rem)', fontWeight: 800, color: 'var(--color-text-primary)' }}>
-              Local Pet Care <span style={{ color: 'var(--color-primary)' }}>Near You.</span>
-            </h2>
-            <p style={{
-              fontSize: '1.1rem',
-              color: 'var(--color-text-secondary)',
-              maxWidth: '600px',
-              margin: '1rem auto 0',
-              lineHeight: 1.6,
-            }}>
-              Whether you need to book a vet or find a local grooming store, our platform maps everything you need around your home base.
-            </p>
-          </motion.div>
-        </div>
-
-        {/* Map Container Wrapper */}
+    <motion.div
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '1rem',
+        background: 'white',
+        borderRadius: '9999px',
+        padding: '0.75rem 1.5rem',
+        boxShadow: '0 4px 24px rgba(34,197,94,0.15), 0 2px 8px rgba(0,0,0,0.05)',
+        border: '1px solid rgba(34,197,94,0.2)',
+      }}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, type: 'spring' }}
+    >
+      {/* Pulse dot */}
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
         <motion.div
-          className="card"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as any }}
+          animate={{ scale: [1, 1.3, 1], opacity: [0.6, 1, 0.6] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
           style={{
-            padding: '1rem',
-            borderRadius: '2rem', // Larger outer radius
+            width: '10px',
+            height: '10px',
+            borderRadius: '50%',
+            background: '#22C55E',
+            position: 'relative',
           }}
-        >
-          {/* Inner Map Box with border radius matching inner */}
-          <div style={{ 
-            borderRadius: '1.25rem', 
-            overflow: 'hidden',
-            border: '1px solid var(--color-border)',
-          }}>
-            <MapUI />
-          </div>
-        </motion.div>
-
+        />
+        <motion.div
+          animate={{ scale: [1, 2.2, 1], opacity: [0.4, 0, 0.4] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeOut' }}
+          style={{
+            position: 'absolute',
+            inset: '-2px',
+            borderRadius: '50%',
+            background: 'rgba(34,197,94,0.4)',
+          }}
+        />
       </div>
-    </section>
+
+      {/* Text */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+        <Users size={15} color="#22C55E" />
+        <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#0F172A' }}>
+          <motion.span
+            key={count}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {count}
+          </motion.span>
+          {' '}Volunteers Active
+        </span>
+        <span style={{ color: '#94A3B8', fontSize: '0.88rem', fontWeight: 500 }}>
+          in Bhubaneswar Right Now
+        </span>
+      </div>
+
+      {/* Location pill */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.3rem',
+        background: 'rgba(37,99,235,0.07)',
+        borderRadius: '99px',
+        padding: '0.25rem 0.75rem',
+      }}>
+        <MapPin size={12} color="#2563EB" />
+        <span style={{ fontSize: '0.78rem', color: '#2563EB', fontWeight: 600 }}>Live</span>
+      </div>
+    </motion.div>
   );
 }

@@ -1,20 +1,22 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { PawPrint, Menu, X } from 'lucide-react';
 import Link from 'next/link';
+import { PawPrint, Menu, X } from 'lucide-react';
 import { useState } from 'react';
-import ThemeToggle from './ThemeToggle';
+
+import { useModals } from '@/lib/ModalContext';
 
 const NAV_LINKS = [
-  { label: 'Services', href: '#services' },
-  { label: 'Find a Caretaker', href: '#caretakers' },
-  { label: 'Pet Tips', href: '#tips' },
-  { label: 'About', href: '#about' },
+  { label: 'Services', href: '/#services' },
+  { label: 'Find a Caretaker', href: '/#caretakers' },
+  { label: 'Pet Tips', href: '/#tips' },
+  { label: 'Dashboard', href: '/dashboard' },
 ];
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { openBookingModal } = useModals();
 
   return (
     <motion.nav
@@ -26,10 +28,10 @@ export default function Navbar() {
         top: 0,
         left: 0,
         right: 0,
-        zIndex: 9999,
+        zIndex: 100,
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        backgroundColor: 'color-mix(in srgb, var(--color-bg-base) 85%, transparent)',
+        backgroundColor: 'rgba(248, 250, 252, 0.85)',
         borderBottom: '1px solid rgba(226, 232, 240, 0.6)',
         padding: '0 1.5rem',
       }}
@@ -60,7 +62,7 @@ export default function Navbar() {
           <span style={{
             fontWeight: 800,
             fontSize: '1.35rem',
-            color: 'var(--color-text-primary)',
+            color: '#0F172A',
             letterSpacing: '-0.02em',
           }}>
             Vet<span style={{ color: '#2563EB' }}>aura</span>
@@ -80,7 +82,7 @@ export default function Navbar() {
                 borderRadius: '8px',
                 fontSize: '0.9rem',
                 fontWeight: 500,
-                color: 'var(--color-text-secondary)',
+                color: '#475569',
                 textDecoration: 'none',
                 transition: 'background 0.2s',
               }}
@@ -92,18 +94,17 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* CTA + Hamburger + ThemeToggle */}
+        {/* CTA + Hamburger */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <ThemeToggle />
-          <motion.a
-            href="#services"
+          <motion.button
+            onClick={openBookingModal}
             className="btn-primary hide-mobile"
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
-            style={{ padding: '0.55rem 1.3rem', fontSize: '0.88rem' }}
+            style={{ padding: '0.55rem 1.3rem', fontSize: '0.88rem', border: 'none', cursor: 'pointer' }}
           >
             Book Now
-          </motion.a>
+          </motion.button>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             style={{
@@ -112,7 +113,7 @@ export default function Navbar() {
               cursor: 'pointer',
               padding: '6px',
               display: 'none',
-              color: 'var(--color-text-primary)',
+              color: '#0F172A',
             }}
             className="show-mobile"
             aria-label="Toggle menu"
@@ -129,7 +130,7 @@ export default function Navbar() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           style={{
-            background: 'var(--color-card-bg)',
+            background: 'white',
             borderRadius: '0 0 16px 16px',
             padding: '1rem 1.5rem 1.5rem',
             borderTop: '1px solid #E2E8F0',
@@ -143,7 +144,7 @@ export default function Navbar() {
               style={{
                 display: 'block',
                 padding: '0.7rem 0',
-                color: 'var(--color-text-primary)',
+                color: '#475569',
                 textDecoration: 'none',
                 fontWeight: 500,
                 fontSize: '0.95rem',
@@ -153,9 +154,9 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
-          <a href="#services" className="btn-primary" style={{ marginTop: '1rem', justifyContent: 'center' }}>
+          <button onClick={() => { setMobileOpen(false); openBookingModal(); }} className="btn-primary" style={{ marginTop: '1rem', justifyContent: 'center', width: '100%', border: 'none', cursor: 'pointer' }}>
             Book Now
-          </a>
+          </button>
         </motion.div>
       )}
 

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Search, Calendar, MapPin, ArrowRight, Sparkles } from 'lucide-react';
 import FloatingPet from './FloatingPet';
+import { useModals } from '@/lib/ModalContext';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -14,6 +15,8 @@ const fadeUp = {
 };
 
 export default function HeroSection() {
+  const { openBookingModal, openCaretakersModal } = useModals();
+
   return (
     <section
       id="hero"
@@ -65,7 +68,7 @@ export default function HeroSection() {
                 fontWeight: 800,
                 lineHeight: 1.15,
                 letterSpacing: '-0.03em',
-                color: 'var(--color-text-primary)',
+                color: '#0F172A',
                 marginBottom: '1.25rem',
               }}
             >
@@ -82,7 +85,7 @@ export default function HeroSection() {
               animate="visible"
               style={{
                 fontSize: '1.1rem',
-                color: 'var(--color-text-secondary)',
+                color: '#475569',
                 lineHeight: 1.7,
                 marginBottom: '2.25rem',
                 maxWidth: '520px',
@@ -100,25 +103,27 @@ export default function HeroSection() {
               animate="visible"
               style={{ display: 'flex', flexWrap: 'wrap', gap: '0.9rem', marginBottom: '3rem' }}
             >
-              <motion.a
-                href="#caretakers"
+              <motion.button
+                onClick={openCaretakersModal}
                 className="btn-primary"
                 whileHover={{ scale: 1.04, y: -2 }}
                 whileTap={{ scale: 0.97 }}
+                style={{ border: 'none', cursor: 'pointer' }}
               >
                 <Search size={17} />
                 Find a Caretaker
                 <ArrowRight size={16} />
-              </motion.a>
-              <motion.a
-                href="#services"
+              </motion.button>
+              <motion.button
+                onClick={openBookingModal}
                 className="btn-secondary"
                 whileHover={{ scale: 1.04, y: -2 }}
                 whileTap={{ scale: 0.97 }}
+                style={{ border: 'none', cursor: 'pointer' }}
               >
                 <Calendar size={17} />
                 Book a Vet
-              </motion.a>
+              </motion.button>
             </motion.div>
 
             {/* Stats Row */}
@@ -135,10 +140,10 @@ export default function HeroSection() {
                 { value: '15+', label: 'Partner Vets' },
               ].map((stat) => (
                 <div key={stat.label}>
-                  <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--color-text-primary)', lineHeight: 1 }}>
+                  <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#0F172A', lineHeight: 1 }}>
                     {stat.value}
                   </div>
-                  <div style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', fontWeight: 500, marginTop: '0.2rem' }}>
+                  <div style={{ fontSize: '0.82rem', color: '#94A3B8', fontWeight: 500, marginTop: '0.2rem' }}>
                     {stat.label}
                   </div>
                 </div>
@@ -151,7 +156,7 @@ export default function HeroSection() {
               variants={fadeUp}
               initial="hidden"
               animate="visible"
-              style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--color-text-muted)' }}
+              style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#94A3B8' }}
             >
               <MapPin size={14} />
               <span style={{ fontSize: '0.82rem', fontWeight: 500 }}>Currently serving Bhubaneswar, Odisha</span>
@@ -178,7 +183,7 @@ export default function HeroSection() {
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ display: 'inline-block', color: 'var(--color-text-muted)', fontSize: '1.5rem' }}
+            style={{ display: 'inline-block', color: '#CBD5E1', fontSize: '1.5rem' }}
           >
             ↓
           </motion.div>

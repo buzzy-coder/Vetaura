@@ -1,7 +1,5 @@
 // ============================================================
-// Vetaura — API Utility Layer
-// Stubs ready for PostgreSQL (Prisma) or MongoDB (Mongoose)
-// Replace mock returns with real DB/API calls
+// Vetaura — API Utility Layer (MongoDB Backed)
 // ============================================================
 
 import {
@@ -12,146 +10,106 @@ import {
   AppointmentRequest,
   ActiveVolunteersResponse,
 } from './types';
-import {
-  MOCK_VOLUNTEERS,
-  MOCK_PET,
-  MOCK_MEDICAL_RECORDS,
-  ACTIVE_VOLUNTEER_COUNT,
-} from './mockData';
 
-// Base URL — set via environment variable in production
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
 
 // ----------------------------------------------------------
 // Volunteer APIs
 // ----------------------------------------------------------
 
-/**
- * Fetch all active volunteers, optionally filtered by zone.
- * TODO: Replace with `fetch(`${BASE_URL}/api/volunteers?zone=${zone}`)` + DB query
- */
 export async function getActiveVolunteers(zone?: string): Promise<Volunteer[]> {
-  // Simulate network delay
-  await new Promise((r) => setTimeout(r, 300));
-  if (zone) {
-    return MOCK_VOLUNTEERS.filter(
-      (v) => v.isActive && v.location.zone.toLowerCase() === zone.toLowerCase()
-    );
-  }
-  return MOCK_VOLUNTEERS.filter((v) => v.isActive);
+  const url = zone ? `${BASE_URL}/api/volunteers?zone=${encodeURIComponent(zone)}` : `${BASE_URL}/api/volunteers`;
+  const res = await fetch(url, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch active volunteers');
+  return res.json();
 }
 
-/**
- * Get the count of active volunteers in Bhubaneswar right now.
- * TODO: Replace with realtime DB query or WebSocket subscription
- */
 export async function getActiveVolunteerCount(): Promise<ActiveVolunteersResponse> {
-  await new Promise((r) => setTimeout(r, 200));
-  return {
-    total: ACTIVE_VOLUNTEER_COUNT,
-    zone: 'Bhubaneswar',
-    volunteers: MOCK_VOLUNTEERS.filter((v) => v.isActive).map((v) => ({
-      id: v.id,
-      name: v.name,
-      avatar: v.avatar,
-      rating: v.rating,
-      servicesOffered: v.servicesOffered,
-      isActive: v.isActive,
-    })),
-  };
+  const res = await fetch(`${BASE_URL}/api/volunteers?countOnly=true`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch active volunteer count');
+  return res.json();
+}
+
+export async function getUserProfile(phone: string): Promise<any> {
+  const res = await fetch(`${BASE_URL}/api/users/me?phone=${phone}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch user profile');
+  return res.json();
+}
+
+export async function getPetProfile(ownerId: string): Promise<PetProfile> {
+  const res = await fetch(`${BASE_URL}/api/pets/${ownerId}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch pet profile');
+  return res.json();
 }
 
 // ----------------------------------------------------------
 // Pet Profile APIs
 // ----------------------------------------------------------
 
-/**
- * Fetch a pet profile by owner ID.
- * TODO: `SELECT * FROM pets WHERE owner_id = $1` (PostgreSQL)
- *        or `PetModel.findOne({ ownerId })` (MongoDB)
- */
-export async function getPetProfile(ownerId: string): Promise<PetProfile | null> {
-  await new Promise((r) => setTimeout(r, 300));
-  if (ownerId === 'owner1') return MOCK_PET;
-  return null;
-}
-
-/**
- * Create or update a pet profile.
- * TODO: Upsert into `pets` table / collection
- */
 export async function upsertPetProfile(
   data: Omit<PetProfile, 'id' | 'createdAt' | 'updatedAt'>
 ): Promise<PetProfile> {
-  await new Promise((r) => setTimeout(r, 500));
-  return {
-    ...data,
-    id: `p_${Date.now()}`,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
+  const res = await fetch(`${BASE_URL}/api/pets`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to upsert pet profile');
+  return res.json();
 }
 
 // ----------------------------------------------------------
 // Medical Record APIs
 // ----------------------------------------------------------
 
-/**
- * Fetch all medical records for a pet.
- * TODO: `SELECT * FROM medical_records WHERE pet_id = $1 ORDER BY date DESC`
- */
 export async function getMedicalRecords(petId: string): Promise<MedicalRecord[]> {
-  await new Promise((r) => setTimeout(r, 300));
-  return MOCK_MEDICAL_RECORDS.filter((r) => r.petId === petId);
+  const res = await fetch(`${BASE_URL}/api/medical-records?petId=${petId}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch medical records');
+  return res.json();
 }
 
-/**
- * Add a new medical record.
- * TODO: `INSERT INTO medical_records (...) VALUES (...)`
- */
 export async function addMedicalRecord(
-  data: Omit<MedicalRecord, 'id' | 'createdAt'>
+  data: Omit<MedicalRecord, 'id' | 'createdAt' | 'updatedAt'>
 ): Promise<MedicalRecord> {
-  await new Promise((r) => setTimeout(r, 400));
-  return {
-    ...data,
-    id: `mr_${Date.now()}`,
-    createdAt: new Date(),
-  };
+  const res = await fetch(`${BASE_URL}/api/medical-records`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to add medical record');
+  return res.json();
 }
 
 // ----------------------------------------------------------
 // Appointment / Booking APIs
 // ----------------------------------------------------------
 
-/**
- * Book a vet appointment or volunteer service.
- * TODO: POST to `/api/appointments` → INSERT into `appointments` table
- */
 export async function bookAppointment(data: AppointmentRequest): Promise<Appointment> {
-  await new Promise((r) => setTimeout(r, 600));
-  const appointment: Appointment = {
-    id: `apt_${Date.now()}`,
-    type: data.type,
-    petId: data.petId,
-    ownerId: data.ownerId,
-    volunteerId: data.volunteerId,
-    serviceType: data.serviceType,
-    status: 'pending',
-    scheduledAt: new Date(data.scheduledAt),
-    address: data.address,
-    notes: data.notes,
-    createdAt: new Date(),
-  };
+  const res = await fetch(`${BASE_URL}/api/appointments`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to book appointment');
+  const appointment = await res.json();
   console.log('[Vetaura] Appointment booked:', appointment);
   return appointment;
 }
 
-/**
- * Fetch all appointments for a pet owner.
- * TODO: `SELECT * FROM appointments WHERE owner_id = $1`
- */
 export async function getAppointments(ownerId: string): Promise<Appointment[]> {
-  await new Promise((r) => setTimeout(r, 300));
-  return [];
+  const res = await fetch(`${BASE_URL}/api/appointments?ownerId=${ownerId}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch appointments');
+  return res.json();
 }
+
+export async function assignCaretaker(phone: string, caretakerId: string): Promise<any> {
+  const res = await fetch(`${BASE_URL}/api/users/assign-caretaker`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone, caretakerId }),
+  });
+  if (!res.ok) throw new Error('Failed to assign caretaker');
+  return res.json();
+}
+
+

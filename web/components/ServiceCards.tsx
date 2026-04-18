@@ -15,6 +15,7 @@ import {
   Syringe,
   Bug,
 } from 'lucide-react';
+import { useModals } from '@/lib/ModalContext';
 import { ACTIVE_VOLUNTEER_COUNT } from '@/lib/mockData';
 
 // ─── Animation Variants ──────────────────────────────────────
@@ -114,6 +115,7 @@ const SERVICES = [
 export default function ServiceCards() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
+  const { openBookingModal, openCaretakersModal } = useModals();
 
   return (
     <section
@@ -146,7 +148,7 @@ export default function ServiceCards() {
             style={{
               fontSize: 'clamp(1.75rem, 4vw, 2.75rem)',
               fontWeight: 800,
-              color: 'var(--color-text-primary)',
+              color: '#0F172A',
               letterSpacing: '-0.03em',
               lineHeight: 1.2,
               marginBottom: '1rem',
@@ -159,7 +161,7 @@ export default function ServiceCards() {
           <p
             style={{
               fontSize: '1.05rem',
-              color: 'var(--color-text-secondary)',
+              color: '#64748B',
               maxWidth: '520px',
               margin: '0 auto',
               lineHeight: 1.7,
@@ -181,7 +183,11 @@ export default function ServiceCards() {
           }}
         >
           {SERVICES.map((svc) => (
-            <ServiceCard key={svc.id} svc={svc} />
+            <ServiceCard 
+              key={svc.id} 
+              svc={svc} 
+              onClick={svc.href === '#caretakers' ? openCaretakersModal : openBookingModal} 
+            />
           ))}
         </motion.div>
       </div>
@@ -190,7 +196,7 @@ export default function ServiceCards() {
 }
 
 // ─── Individual Card ─────────────────────────────────────────
-function ServiceCard({ svc }: { svc: (typeof SERVICES)[0] }) {
+function ServiceCard({ svc, onClick }: { svc: (typeof SERVICES)[0], onClick: () => void }) {
   const Icon = svc.icon;
 
   return (
@@ -202,9 +208,9 @@ function ServiceCard({ svc }: { svc: (typeof SERVICES)[0] }) {
           '0 28px 80px rgba(37, 99, 235, 0.14), 0 8px 32px rgba(0,0,0,0.08)',
       }}
       style={{
-        background: 'var(--color-card-bg)',
+        background: '#ffffff',
         borderRadius: '1.5rem',
-        border: '1px solid var(--color-border)',
+        border: '1px solid rgba(226,232,240,0.8)',
         boxShadow: 'var(--shadow-card)',
         padding: '2rem',
         display: 'flex',
@@ -306,7 +312,7 @@ function ServiceCard({ svc }: { svc: (typeof SERVICES)[0] }) {
           style={{
             fontSize: '1.3rem',
             fontWeight: 800,
-            color: 'var(--color-text-primary)',
+            color: '#0F172A',
             letterSpacing: '-0.02em',
             marginBottom: '0.8rem',
             lineHeight: 1.25,
@@ -317,7 +323,7 @@ function ServiceCard({ svc }: { svc: (typeof SERVICES)[0] }) {
         <p
           style={{
             fontSize: '0.9rem',
-            color: 'var(--color-text-secondary)',
+            color: '#64748B',
             lineHeight: 1.7,
           }}
         >
@@ -346,7 +352,7 @@ function ServiceCard({ svc }: { svc: (typeof SERVICES)[0] }) {
                 alignItems: 'center',
                 gap: '0.6rem',
                 fontSize: '0.85rem',
-                color: 'var(--color-text-secondary)',
+                color: '#475569',
                 fontWeight: 500,
               }}
             >
@@ -371,8 +377,8 @@ function ServiceCard({ svc }: { svc: (typeof SERVICES)[0] }) {
       </ul>
 
       {/* CTA */}
-      <motion.a
-        href={svc.href}
+      <motion.button
+        onClick={onClick}
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
         style={{
@@ -386,7 +392,7 @@ function ServiceCard({ svc }: { svc: (typeof SERVICES)[0] }) {
           color: svc.accent,
           fontWeight: 700,
           fontSize: '0.9rem',
-          textDecoration: 'none',
+          cursor: 'pointer',
           transition: 'background 0.25s ease',
         }}
         onMouseEnter={(e) => {
@@ -398,7 +404,7 @@ function ServiceCard({ svc }: { svc: (typeof SERVICES)[0] }) {
       >
         {svc.cta}
         <ArrowRight size={16} strokeWidth={2.5} />
-      </motion.a>
+      </motion.button>
     </motion.div>
   );
 }
