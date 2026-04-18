@@ -1,9 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import { PawPrint, Menu, X } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
+import ThemeToggle from './ThemeToggle';
 
 const NAV_LINKS = [
   { label: 'Services', href: '#services' },
@@ -25,10 +26,10 @@ export default function Navbar() {
         top: 0,
         left: 0,
         right: 0,
-        zIndex: 100,
+        zIndex: 9999,
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        backgroundColor: 'rgba(248, 250, 252, 0.85)',
+        backgroundColor: 'color-mix(in srgb, var(--color-bg-base) 85%, transparent)',
         borderBottom: '1px solid rgba(226, 232, 240, 0.6)',
         padding: '0 1.5rem',
       }}
@@ -59,7 +60,7 @@ export default function Navbar() {
           <span style={{
             fontWeight: 800,
             fontSize: '1.35rem',
-            color: '#0F172A',
+            color: 'var(--color-text-primary)',
             letterSpacing: '-0.02em',
           }}>
             Vet<span style={{ color: '#2563EB' }}>aura</span>
@@ -79,7 +80,7 @@ export default function Navbar() {
                 borderRadius: '8px',
                 fontSize: '0.9rem',
                 fontWeight: 500,
-                color: '#475569',
+                color: 'var(--color-text-secondary)',
                 textDecoration: 'none',
                 transition: 'background 0.2s',
               }}
@@ -91,8 +92,9 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* CTA + Hamburger */}
+        {/* CTA + Hamburger + ThemeToggle */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <ThemeToggle />
           <motion.a
             href="#services"
             className="btn-primary hide-mobile"
@@ -110,7 +112,7 @@ export default function Navbar() {
               cursor: 'pointer',
               padding: '6px',
               display: 'none',
-              color: '#0F172A',
+              color: 'var(--color-text-primary)',
             }}
             className="show-mobile"
             aria-label="Toggle menu"
@@ -127,7 +129,7 @@ export default function Navbar() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           style={{
-            background: 'white',
+            background: 'var(--color-card-bg)',
             borderRadius: '0 0 16px 16px',
             padding: '1rem 1.5rem 1.5rem',
             borderTop: '1px solid #E2E8F0',
@@ -141,7 +143,7 @@ export default function Navbar() {
               style={{
                 display: 'block',
                 padding: '0.7rem 0',
-                color: '#475569',
+                color: 'var(--color-text-primary)',
                 textDecoration: 'none',
                 fontWeight: 500,
                 fontSize: '0.95rem',

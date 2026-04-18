@@ -179,3 +179,45 @@ export const EDUCATION_TIPS = [
 ];
 
 export const ACTIVE_VOLUNTEER_COUNT = 24;
+
+export const USER_LOCATION = {
+  lat: 20.296059,
+  lng: 85.824539,
+  address: 'Saheed Nagar, Bhubaneswar',
+  name: 'Aarav & Bruno',
+};
+
+export const MOCK_MARKETPLACES = [
+  {
+    id: 'm1',
+    name: 'Pet Central Store',
+    lat: 20.2980,
+    lng: 85.8260,
+    type: 'Store',
+    description: 'Premium pet food and toys. Open till 9 PM.',
+  },
+  {
+    id: 'm2',
+    name: 'PawCare Veterinary Clinic',
+    lat: 20.3015,
+    lng: 85.8200,
+    type: 'Clinic',
+    description: 'Dr. Subrata Nanda - Emergency care available.',
+  },
+  {
+    id: 'm3',
+    name: 'Bhubaneswar Pet Market',
+    lat: 20.2910,
+    lng: 85.8300,
+    type: 'Market',
+    description: 'Local market for affordable accessories and food.',
+  },
+  {
+    id: 'm4',
+    name: 'Fluffy Paws Grooming',
+    lat: 20.2855,
+    lng: 85.8211,
+    type: 'Grooming',
+    description: 'Professional bathing and clipping services.',
+  },
+];
