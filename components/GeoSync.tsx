@@ -1,0 +1,96 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { Users, MapPin, Zap } from 'lucide-react';
+
+export default function GeoSync() {
+  const [count, setCount] = useState(24);
+
+  // Simulate live fluctuation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCount((c) => {
+        const delta = Math.random() > 0.5 ? 1 : -1;
+        const next = c + delta;
+        return Math.min(Math.max(next, 18), 32);
+      });
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <motion.div
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '1rem',
+        background: 'white',
+        borderRadius: '9999px',
+        padding: '0.75rem 1.5rem',
+        boxShadow: '0 4px 24px rgba(34,197,94,0.15), 0 2px 8px rgba(0,0,0,0.05)',
+        border: '1px solid rgba(34,197,94,0.2)',
+      }}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, type: 'spring' }}
+    >
+      {/* Pulse dot */}
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+        <motion.div
+          animate={{ scale: [1, 1.3, 1], opacity: [0.6, 1, 0.6] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+          style={{
+            width: '10px',
+            height: '10px',
+            borderRadius: '50%',
+            background: '#22C55E',
+            position: 'relative',
+          }}
+        />
+        <motion.div
+          animate={{ scale: [1, 2.2, 1], opacity: [0.4, 0, 0.4] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeOut' }}
+          style={{
+            position: 'absolute',
+            inset: '-2px',
+            borderRadius: '50%',
+            background: 'rgba(34,197,94,0.4)',
+          }}
+        />
+      </div>
+
+      {/* Text */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+        <Users size={15} color="#22C55E" />
+        <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#0F172A' }}>
+          <motion.span
+            key={count}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {count}
+          </motion.span>
+          {' '}Volunteers Active
+        </span>
+        <span style={{ color: '#94A3B8', fontSize: '0.88rem', fontWeight: 500 }}>
+          in Bhubaneswar Right Now
+        </span>
+      </div>
+
+      {/* Location pill */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.3rem',
+        background: 'rgba(37,99,235,0.07)',
+        borderRadius: '99px',
+        padding: '0.25rem 0.75rem',
+      }}>
+        <MapPin size={12} color="#2563EB" />
+        <span style={{ fontSize: '0.78rem', color: '#2563EB', fontWeight: 600 }}>Live</span>
+      </div>
+    </motion.div>
+  );
+}
