@@ -38,6 +38,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://vetaura.in'),
 };
 import { ModalProvider } from '@/lib/ModalContext';
+import { ThemeProvider } from '@/components/ThemeProvider';
 
 export default function RootLayout({
   children,
@@ -45,11 +46,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${plusJakarta.variable} scroll-smooth`}>
+    <html lang="en" className={`${plusJakarta.variable} scroll-smooth`} suppressHydrationWarning>
       <body className="min-h-full antialiased">
-        <ModalProvider>
-          {children}
-        </ModalProvider>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          <ModalProvider>
+            {children}
+          </ModalProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

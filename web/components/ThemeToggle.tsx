@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
-  const { resolvedTheme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
 
   // Wait until mounted on client so we can safely read the theme
   useEffect(() => setMounted(true), []);
@@ -16,7 +16,8 @@ export default function ThemeToggle() {
     return <div style={{ width: 36, height: 36 }} />;
   }
 
-  const isDark = resolvedTheme === 'dark';
+  const currentTheme = theme === 'system' ? resolvedTheme : theme;
+  const isDark = currentTheme === 'dark';
 
   return (
     <motion.button

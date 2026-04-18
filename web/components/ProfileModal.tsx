@@ -56,22 +56,22 @@ export default function ProfileModal({ onClose }: { onClose: () => void }) {
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         style={{
-          background: 'white', borderRadius: '1.5rem', width: '90%', maxWidth: '500px',
+          background: 'var(--color-card-bg)', borderRadius: '1.5rem', width: '90%', maxWidth: '500px',
           padding: '2rem', position: 'relative', boxShadow: '0 20px 60px rgba(0,0,0,0.1)'
         }}
       >
         <button onClick={onClose} style={{
           position: 'absolute', top: '1.25rem', right: '1.25rem', background: 'none', border: 'none', cursor: 'pointer', padding: '0.5rem'
         }}>
-          <X size={20} color="#64748B" />
+          <X size={20} color="var(--color-text-muted)" />
         </button>
 
         {!success ? (
           <>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem', color: '#0F172A' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem', color: 'var(--color-text-primary)' }}>
               Create Pet Profile
             </h2>
-            <p style={{ color: '#64748B', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+            <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
               Register your furry friend to experience weightless pet care.
             </p>
 
@@ -82,7 +82,7 @@ export default function ProfileModal({ onClose }: { onClose: () => void }) {
               </div>
               <input required type="email" placeholder="Email Address" value={formData.ownerEmail} onChange={e => setFormData({...formData, ownerEmail: e.target.value})} style={inputStyle} />
               
-              <div style={{ padding: '1rem', border: '1px dashed #E2E8F0', borderRadius: '1rem', marginTop: '0.5rem' }}>
+              <div style={{ padding: '1rem', border: '1px dashed var(--color-border)', borderRadius: '1rem', marginTop: '0.5rem' }}>
                 <h3 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.75rem' }}>Pet Details</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
@@ -111,8 +111,8 @@ export default function ProfileModal({ onClose }: { onClose: () => void }) {
         ) : (
           <div style={{ textAlign: 'center', padding: '2rem 0' }}>
             <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🐾</div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: '0.5rem' }}>Profile Created!</h2>
-            <p style={{ color: '#64748B', marginBottom: '1.5rem' }}>You're all set to book appointments.</p>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: '0.5rem' }}>Profile Created!</h2>
+            <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>You're all set to book appointments.</p>
             <button onClick={onClose} className="btn-secondary" style={{ width: '100%', justifyContent: 'center' }}>
               Close
             </button>
@@ -126,7 +126,7 @@ export default function ProfileModal({ onClose }: { onClose: () => void }) {
 const inputStyle = {
   padding: '0.8rem 1rem',
   borderRadius: '0.75rem',
-  border: '1px solid #E2E8F0',
+  border: '1px solid var(--color-border)',
   fontSize: '0.95rem',
   outline: 'none',
   width: '100%',

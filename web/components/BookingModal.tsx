@@ -53,22 +53,22 @@ export default function BookingModal({ onClose }: { onClose: () => void }) {
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         style={{
-          background: 'white', borderRadius: '1.5rem', width: '90%', maxWidth: '500px',
+          background: 'var(--color-card-bg)', borderRadius: '1.5rem', width: '90%', maxWidth: '500px',
           padding: '2rem', position: 'relative', boxShadow: '0 20px 60px rgba(0,0,0,0.1)'
         }}
       >
         <button onClick={onClose} style={{
           position: 'absolute', top: '1.25rem', right: '1.25rem', background: 'none', border: 'none', cursor: 'pointer', padding: '0.5rem'
         }}>
-          <X size={20} color="#64748B" />
+          <X size={20} color="var(--color-text-muted)" />
         </button>
 
         {!success ? (
           <>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem', color: '#0F172A' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem', color: 'var(--color-text-primary)' }}>
               Book an Appointment
             </h2>
-            <p style={{ color: '#64748B', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+            <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
               Schedule a vet or volunteer exactly when you need them.
             </p>
 
@@ -97,8 +97,8 @@ export default function BookingModal({ onClose }: { onClose: () => void }) {
         ) : (
           <div style={{ textAlign: 'center', padding: '2rem 0' }}>
             <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎉</div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: '0.5rem' }}>Booking Confirmed!</h2>
-            <p style={{ color: '#64748B', marginBottom: '1.5rem' }}>Your request has been successfully saved.</p>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: '0.5rem' }}>Booking Confirmed!</h2>
+            <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>Your request has been successfully saved.</p>
             <button onClick={onClose} className="btn-secondary" style={{ width: '100%', justifyContent: 'center' }}>
               Close
             </button>
@@ -112,7 +112,7 @@ export default function BookingModal({ onClose }: { onClose: () => void }) {
 const inputStyle = {
   padding: '0.8rem 1rem',
   borderRadius: '0.75rem',
-  border: '1px solid #E2E8F0',
+  border: '1px solid var(--color-border)',
   fontSize: '0.95rem',
   outline: 'none',
   width: '100%',

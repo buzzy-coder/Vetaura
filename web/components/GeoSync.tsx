@@ -31,7 +31,7 @@ export default function GeoSync() {
         display: 'inline-flex',
         alignItems: 'center',
         gap: '1rem',
-        background: 'white',
+        background: 'var(--color-card-bg)',
         borderRadius: '9999px',
         padding: '0.75rem 1.5rem',
         boxShadow: '0 4px 24px rgba(34,197,94,0.15), 0 2px 8px rgba(0,0,0,0.05)',
@@ -69,7 +69,7 @@ export default function GeoSync() {
       {/* Text */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
         <Users size={15} color="#22C55E" />
-        <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#0F172A' }}>
+        <span style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text-primary)' }}>
           <motion.span
             key={count}
             initial={{ opacity: 0, y: -8 }}
@@ -80,7 +80,7 @@ export default function GeoSync() {
           </motion.span>
           {' '}Volunteers Active
         </span>
-        <span style={{ color: '#94A3B8', fontSize: '0.88rem', fontWeight: 500 }}>
+        <span style={{ color: 'var(--color-text-muted)', fontSize: '0.88rem', fontWeight: 500 }}>
           in Bhubaneswar Right Now
         </span>
       </div>

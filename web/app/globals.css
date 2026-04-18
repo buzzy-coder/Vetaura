@@ -19,6 +19,14 @@
   --color-text-primary: #0F172A;
   --color-text-secondary: #475569;
   --color-text-muted: #94A3B8;
+  --color-bg-alt: #F1F5F9;
+  --color-border: #E2E8F0;
+  --color-card-bg: #ffffff;
+  --color-nav-bg: rgba(248, 250, 252, 0.85);
+  --color-nav-border: rgba(226, 232, 240, 0.6);
+  --color-footer-bg: #0A0F1E;
+  --color-logo-accent: #2563EB;
+  --color-footer-logo: var(--color-mist);
 
   /* Shadows — the "Antigravity" feel */
   --shadow-float: 0 4px 24px rgba(37, 99, 235, 0.06), 0 1px 8px rgba(0,0,0,0.04);
@@ -36,6 +44,29 @@
 
   /* Font */
   --font-sans: var(--font-plus-jakarta), 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+/* Dark Mode Overrides */
+:root.dark {
+  --color-mist: #0F172A;
+  --color-mist-deep: #1E293B;
+  --color-bg-alt: #1E293B;
+  --color-border: #334155;
+  --color-slate-soft: #334155;
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: #64748B;
+  --color-card-bg: #1E293B;
+  --color-nav-bg: rgba(15, 23, 42, 0.85);
+  --color-nav-border: rgba(51, 65, 85, 0.6);
+  --color-footer-bg: #000000;
+  --color-logo-accent: #60A5FA;
+  --color-footer-logo: #ffffff;
+  
+  --shadow-float: 0 4px 24px rgba(0, 0, 0, 0.4), 0 1px 8px rgba(0,0,0,0.3);
+  --shadow-float-md: 0 12px 48px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0,0,0,0.4);
+  --shadow-float-hover: 0 24px 80px rgba(0, 0, 0, 0.7), 0 8px 30px rgba(0,0,0,0.5);
+  --shadow-card: 0 2px 16px rgba(0, 0, 0, 0.5), 0 8px 32px rgba(37, 99, 235, 0.04);
 }
 
 /* ============================================================
@@ -79,15 +110,15 @@ body {
     radial-gradient(ellipse 70% 55% at 65% -5%, rgba(37,99,235,0.09) 0%, transparent 65%),
     radial-gradient(ellipse 45% 45% at 5%  85%, rgba(255,107,107,0.06) 0%, transparent 65%),
     radial-gradient(ellipse 30% 30% at 85% 90%, rgba(255,202,40,0.05)  0%, transparent 60%),
-    #F8FAFC;
+    var(--color-mist);
 }
 
 .bg-services-gradient {
-  background: linear-gradient(180deg, #ffffff 0%, #F8FAFC 50%, #ffffff 100%);
+  background: linear-gradient(180deg, var(--color-mist-deep) 0%, var(--color-mist) 50%, var(--color-mist-deep) 100%);
 }
 
 .bg-edu-gradient {
-  background: linear-gradient(135deg, #EEF2FF 0%, #F8FAFC 40%, #FFF7ED 100%);
+  background: linear-gradient(135deg, var(--color-mist-deep) 0%, var(--color-mist) 40%, var(--color-mist-deep) 100%);
 }
 
 /* ============================================================
@@ -156,9 +187,9 @@ body {
    ============================================================ */
 
 .card {
-  background: #ffffff;
+  background: var(--color-card-bg);
   border-radius: var(--radius-card);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  border: 1px solid var(--color-border);
   box-shadow: var(--shadow-card);
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
@@ -256,11 +287,11 @@ body {
 }
 .marquee-wrapper::before {
   left: 0;
-  background: linear-gradient(to right, var(--tw-gradient-from, #EEF2FF), transparent);
+  background: linear-gradient(to right, var(--color-mist-deep), transparent);
 }
 .marquee-wrapper::after {
   right: 0;
-  background: linear-gradient(to left, var(--tw-gradient-to, #FFF7ED), transparent);
+  background: linear-gradient(to left, var(--color-mist-deep), transparent);
 }
 
 /* ============================================================

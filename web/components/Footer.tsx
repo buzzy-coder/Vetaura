@@ -46,8 +46,8 @@ export default function Footer() {
   return (
     <footer
       style={{
-        background: '#0A0F1E',
-        color: '#E2E8F0',
+        background: 'var(--color-footer-bg)',
+        color: 'var(--color-border)',
         paddingTop: '5rem',
         position: 'relative',
         overflow: 'hidden',
@@ -91,12 +91,12 @@ export default function Footer() {
               >
                 <PawPrint size={20} color="white" strokeWidth={2.5} />
               </motion.div>
-              <span style={{ fontWeight: 800, fontSize: '1.35rem', letterSpacing: '-0.02em', color: '#F8FAFC' }}>
-                Vet<span style={{ color: '#60A5FA' }}>aura</span>
+              <span style={{ fontWeight: 800, fontSize: '1.35rem', letterSpacing: '-0.02em', color: 'var(--color-footer-logo)' }}>
+                Vet<span style={{ color: 'var(--color-logo-accent)' }}>aura</span>
               </span>
             </Link>
 
-            <p style={{ fontSize: '0.88rem', color: '#94A3B8', lineHeight: 1.7, marginBottom: '1.5rem', maxWidth: '240px' }}>
+            <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)', lineHeight: 1.7, marginBottom: '1.5rem', maxWidth: '240px' }}>
               Weightless pet care for busy parents in Bhubaneswar, Odisha. Because every pet deserves the best.
             </p>
 
@@ -107,7 +107,7 @@ export default function Footer() {
                 { icon: Phone, text: '+91 98765 43210' },
                 { icon: MapPin, text: 'Bhubaneswar, Odisha 751001' },
               ].map(({ icon: Icon, text }) => (
-                <div key={text} style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', fontSize: '0.83rem', color: '#94A3B8' }}>
+                <div key={text} style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', fontSize: '0.83rem', color: 'var(--color-text-muted)' }}>
                   <Icon size={13} style={{ flexShrink: 0, color: '#60A5FA' }} />
                   {text}
                 </div>
@@ -129,7 +129,7 @@ export default function Footer() {
                     background: 'rgba(255,255,255,0.06)',
                     border: '1px solid rgba(255,255,255,0.08)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: '#94A3B8',
+                    color: 'var(--color-text-muted)',
                     transition: 'background 0.2s, color 0.2s',
                   }}
                   onMouseEnter={(e) => {
@@ -140,7 +140,7 @@ export default function Footer() {
                   onMouseLeave={(e) => {
                     const el = e.currentTarget as HTMLElement;
                     el.style.background = 'rgba(255,255,255,0.06)';
-                    el.style.color = '#94A3B8';
+                    el.style.color = 'var(--color-text-muted)';
                   }}
                 >
                   <Icon size={16} />
@@ -154,7 +154,7 @@ export default function Footer() {
             <div key={category}>
               <h4 style={{
                 fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.08em',
-                textTransform: 'uppercase', color: '#64748B',
+                textTransform: 'uppercase', color: 'var(--color-text-muted)',
                 marginBottom: '1.1rem',
               }}>
                 {category}
@@ -166,7 +166,7 @@ export default function Footer() {
                       href={href}
                       whileHover={{ x: 4, color: '#60A5FA' }}
                       style={{
-                        fontSize: '0.88rem', color: '#94A3B8', textDecoration: 'none',
+                        fontSize: '0.88rem', color: 'var(--color-text-muted)', textDecoration: 'none',
                         fontWeight: 500, transition: 'color 0.2s', display: 'inline-block',
                       }}
                     >
@@ -184,7 +184,7 @@ export default function Footer() {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           flexWrap: 'wrap', gap: '0.75rem',
           padding: '1.5rem 0',
-          fontSize: '0.82rem', color: '#475569',
+          fontSize: '0.82rem', color: 'var(--color-text-secondary)',
         }}>
           <span>
             © {new Date().getFullYear()} Vetaura Technologies Pvt. Ltd. · Bhubaneswar, India

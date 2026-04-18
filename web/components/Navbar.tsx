@@ -6,6 +6,7 @@ import { PawPrint, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 import { useModals } from '@/lib/ModalContext';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const NAV_LINKS = [
   { label: 'Services', href: '/#services' },
@@ -28,11 +29,11 @@ export default function Navbar() {
         top: 0,
         left: 0,
         right: 0,
-        zIndex: 100,
+        zIndex: 1001,
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        backgroundColor: 'rgba(248, 250, 252, 0.85)',
-        borderBottom: '1px solid rgba(226, 232, 240, 0.6)',
+        backgroundColor: 'var(--color-nav-bg)',
+        borderBottom: '1px solid var(--color-nav-border)',
         padding: '0 1.5rem',
       }}
     >
@@ -62,10 +63,10 @@ export default function Navbar() {
           <span style={{
             fontWeight: 800,
             fontSize: '1.35rem',
-            color: '#0F172A',
+            color: 'var(--color-text-primary)',
             letterSpacing: '-0.02em',
           }}>
-            Vet<span style={{ color: '#2563EB' }}>aura</span>
+            Vet<span style={{ color: 'var(--color-logo-accent)' }}>aura</span>
           </span>
         </Link>
 
@@ -82,7 +83,7 @@ export default function Navbar() {
                 borderRadius: '8px',
                 fontSize: '0.9rem',
                 fontWeight: 500,
-                color: '#475569',
+                color: 'var(--color-text-secondary)',
                 textDecoration: 'none',
                 transition: 'background 0.2s',
               }}
@@ -96,6 +97,7 @@ export default function Navbar() {
 
         {/* CTA + Hamburger */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <ThemeToggle />
           <motion.button
             onClick={openBookingModal}
             className="btn-primary hide-mobile"
@@ -113,7 +115,7 @@ export default function Navbar() {
               cursor: 'pointer',
               padding: '6px',
               display: 'none',
-              color: '#0F172A',
+              color: 'var(--color-text-primary)',
             }}
             className="show-mobile"
             aria-label="Toggle menu"
@@ -130,10 +132,10 @@ export default function Navbar() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           style={{
-            background: 'white',
+            background: 'var(--color-card-bg)',
             borderRadius: '0 0 16px 16px',
             padding: '1rem 1.5rem 1.5rem',
-            borderTop: '1px solid #E2E8F0',
+            borderTop: '1px solid var(--color-border)',
           }}
         >
           {NAV_LINKS.map((link) => (
@@ -144,11 +146,11 @@ export default function Navbar() {
               style={{
                 display: 'block',
                 padding: '0.7rem 0',
-                color: '#475569',
+                color: 'var(--color-text-secondary)',
                 textDecoration: 'none',
                 fontWeight: 500,
                 fontSize: '0.95rem',
-                borderBottom: '1px solid #F1F5F9',
+                borderBottom: '1px solid var(--color-bg-alt)',
               }}
             >
               {link.label}

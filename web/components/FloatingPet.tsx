@@ -2,8 +2,19 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 
 export default function FloatingPet() {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const imgSrc = mounted && resolvedTheme === 'dark' ? '/pets-hero-dark.png' : '/pets-hero.png';
+
   return (
     <div style={{ position: 'relative', width: '100%', maxWidth: '500px', margin: '0 auto' }}>
       {/* Glow blob behind the image */}
@@ -41,7 +52,7 @@ export default function FloatingPet() {
         style={{ position: 'relative', zIndex: 1 }}
       >
         <Image
-          src="/pets-hero.png"
+          src={imgSrc}
           alt="Happy dog and cat floating weightlessly — Vetaura mascots"
           width={480}
           height={420}
@@ -63,11 +74,11 @@ export default function FloatingPet() {
           position: 'absolute',
           bottom: '12%',
           left: '-5%',
-          background: 'white',
+          background: 'var(--color-card-bg)',
           borderRadius: '16px',
           padding: '10px 16px',
           boxShadow: '0 8px 30px rgba(0,0,0,0.1)',
-          border: '1px solid #E2E8F0',
+          border: '1px solid var(--color-border)',
           display: 'flex',
           alignItems: 'center',
           gap: '10px',
@@ -76,8 +87,8 @@ export default function FloatingPet() {
       >
         <div style={{ fontSize: '1.4rem' }}>🐾</div>
         <div>
-          <div style={{ fontSize: '0.78rem', color: '#94A3B8', fontWeight: 500 }}>Trusted by</div>
-          <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0F172A' }}>500+ Families</div>
+          <div style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>Trusted by</div>
+          <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>500+ Families</div>
         </div>
       </motion.div>
 
@@ -90,11 +101,11 @@ export default function FloatingPet() {
           position: 'absolute',
           top: '10%',
           right: '-5%',
-          background: 'white',
+          background: 'var(--color-card-bg)',
           borderRadius: '16px',
           padding: '10px 16px',
           boxShadow: '0 8px 30px rgba(0,0,0,0.1)',
-          border: '1px solid #E2E8F0',
+          border: '1px solid var(--color-border)',
           display: 'flex',
           alignItems: 'center',
           gap: '10px',
@@ -103,8 +114,8 @@ export default function FloatingPet() {
       >
         <div style={{ fontSize: '1.4rem' }}>⭐</div>
         <div>
-          <div style={{ fontSize: '0.78rem', color: '#94A3B8', fontWeight: 500 }}>Rating</div>
-          <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0F172A' }}>4.9 / 5.0</div>
+          <div style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>Rating</div>
+          <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>4.9 / 5.0</div>
         </div>
       </motion.div>
     </div>

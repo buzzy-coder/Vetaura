@@ -179,3 +179,29 @@ export const EDUCATION_TIPS = [
 ];
 
 export const ACTIVE_VOLUNTEER_COUNT = 24;
+
+export const USER_LOCATION = {
+  lat: 20.2961,
+  lng: 85.8245,
+  name: 'Aarav',
+  address: 'Bhubaneswar',
+};
+
+export const MOCK_MARKETPLACES = [
+  {
+    id: 'm1',
+    lat: 20.3011,
+    lng: 85.8205,
+    type: 'Clinic',
+    name: 'Paws & Claws Vet',
+    description: 'Full service vet clinic.',
+  },
+  {
+    id: 'm2',
+    lat: 20.2861,
+    lng: 85.8345,
+    type: 'Grooming',
+    name: 'Fluffy Pet Spa',
+    description: 'Premium pet grooming.',
+  },
+];

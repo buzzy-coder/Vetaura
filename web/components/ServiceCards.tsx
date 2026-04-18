@@ -148,7 +148,7 @@ export default function ServiceCards() {
             style={{
               fontSize: 'clamp(1.75rem, 4vw, 2.75rem)',
               fontWeight: 800,
-              color: '#0F172A',
+              color: 'var(--color-text-primary)',
               letterSpacing: '-0.03em',
               lineHeight: 1.2,
               marginBottom: '1rem',
@@ -161,7 +161,7 @@ export default function ServiceCards() {
           <p
             style={{
               fontSize: '1.05rem',
-              color: '#64748B',
+              color: 'var(--color-text-muted)',
               maxWidth: '520px',
               margin: '0 auto',
               lineHeight: 1.7,
@@ -208,7 +208,7 @@ function ServiceCard({ svc, onClick }: { svc: (typeof SERVICES)[0], onClick: () 
           '0 28px 80px rgba(37, 99, 235, 0.14), 0 8px 32px rgba(0,0,0,0.08)',
       }}
       style={{
-        background: '#ffffff',
+        background: 'var(--color-card-bg)',
         borderRadius: '1.5rem',
         border: '1px solid rgba(226,232,240,0.8)',
         boxShadow: 'var(--shadow-card)',
@@ -312,7 +312,7 @@ function ServiceCard({ svc, onClick }: { svc: (typeof SERVICES)[0], onClick: () 
           style={{
             fontSize: '1.3rem',
             fontWeight: 800,
-            color: '#0F172A',
+            color: 'var(--color-text-primary)',
             letterSpacing: '-0.02em',
             marginBottom: '0.8rem',
             lineHeight: 1.25,
@@ -323,7 +323,7 @@ function ServiceCard({ svc, onClick }: { svc: (typeof SERVICES)[0], onClick: () 
         <p
           style={{
             fontSize: '0.9rem',
-            color: '#64748B',
+            color: 'var(--color-text-muted)',
             lineHeight: 1.7,
           }}
         >
@@ -352,7 +352,7 @@ function ServiceCard({ svc, onClick }: { svc: (typeof SERVICES)[0], onClick: () 
                 alignItems: 'center',
                 gap: '0.6rem',
                 fontSize: '0.85rem',
-                color: '#475569',
+                color: 'var(--color-text-secondary)',
                 fontWeight: 500,
               }}
             >

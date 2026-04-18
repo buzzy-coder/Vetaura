@@ -15,7 +15,7 @@ const TAG_COLORS: Record<string, { bg: string; color: string }> = {
   Emergency: { bg: 'rgba(255,107,107,0.12)', color: '#B91C1C' },
   Beginner:  { bg: 'rgba(251,146,60,0.12)',  color: '#C2410C' },
 };
-const DEFAULT_TAG = { bg: 'rgba(148,163,184,0.12)', color: '#475569' };
+const DEFAULT_TAG = { bg: 'rgba(148,163,184,0.12)', color: 'var(--color-text-secondary)' };
 
 // Duplicate for seamless infinite loop
 const DOUBLED_TIPS = [...EDUCATION_TIPS, ...EDUCATION_TIPS];
@@ -77,7 +77,7 @@ export default function EducationHub() {
                     style={{
                       fontSize: 'clamp(1.75rem, 4vw, 2.75rem)',
                       fontWeight: 800,
-                      color: '#0F172A',
+                      color: 'var(--color-text-primary)',
                       letterSpacing: '-0.03em',
                       lineHeight: 1.2,
                     }}
@@ -92,7 +92,7 @@ export default function EducationHub() {
                     style={{
                       marginTop: '0.75rem',
                       fontSize: '1rem',
-                      color: '#64748B',
+                      color: 'var(--color-text-muted)',
                       lineHeight: 1.7,
                       maxWidth: '480px',
                     }}
@@ -135,11 +135,6 @@ export default function EducationHub() {
         animate={inView ? { opacity: 1 } : {}}
         transition={{ duration: 0.7, delay: 0.3 }}
         className="marquee-wrapper"
-        style={{
-          /* Override gradient edges with edu-gradient colors */
-          '--tw-gradient-from': '#EEF2FF',
-          '--tw-gradient-to': '#FFF7ED',
-        } as React.CSSProperties}
       >
         <div
           className="marquee-track"
@@ -165,9 +160,9 @@ export default function EducationHub() {
         >
           <div
             style={{
-              background: 'rgba(255,255,255,0.7)',
+              background: 'var(--color-nav-bg)',
               backdropFilter: 'blur(16px)',
-              border: '1px solid rgba(226,232,240,0.8)',
+              border: '1px solid var(--color-nav-border)',
               borderRadius: '1.25rem',
               padding: '1.5rem 2rem',
               display: 'flex',
@@ -187,13 +182,13 @@ export default function EducationHub() {
                 style={{
                   fontWeight: 700,
                   fontSize: '1rem',
-                  color: '#0F172A',
+                  color: 'var(--color-text-primary)',
                   marginBottom: '0.25rem',
                 }}
               >
                 Get personalised tips for your pet
               </div>
-              <div style={{ fontSize: '0.88rem', color: '#64748B' }}>
+              <div style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)' }}>
                 Join 500+ Bhubaneswar families already on Vetaura
               </div>
             </div>
@@ -222,7 +217,7 @@ function TipCard({ tip }: { tip: (typeof EDUCATION_TIPS)[0] }) {
       whileHover={{ y: -8, boxShadow: '0 16px 40px rgba(37,99,235,0.12), 0 4px 16px rgba(0,0,0,0.06)' }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       style={{
-        background: '#ffffff',
+        background: 'var(--color-card-bg)',
         borderRadius: '1.25rem',
         border: '1px solid rgba(226,232,240,0.8)',
         boxShadow: 'var(--shadow-card)',
@@ -277,7 +272,7 @@ function TipCard({ tip }: { tip: (typeof EDUCATION_TIPS)[0] }) {
         style={{
           fontWeight: 700,
           fontSize: '0.98rem',
-          color: '#0F172A',
+          color: 'var(--color-text-primary)',
           letterSpacing: '-0.01em',
           lineHeight: 1.3,
         }}
@@ -289,7 +284,7 @@ function TipCard({ tip }: { tip: (typeof EDUCATION_TIPS)[0] }) {
       <p
         style={{
           fontSize: '0.83rem',
-          color: '#64748B',
+          color: 'var(--color-text-muted)',
           lineHeight: 1.65,
           flex: 1,
         }}

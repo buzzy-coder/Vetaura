@@ -1,40 +1,64 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '../../../lib/db';
 import { User } from '../../../lib/models/User';
+import { MOCK_VOLUNTEERS } from '../../../lib/mockData';
 
 export async function GET(request: Request) {
   try {
-    await dbConnect();
-
     const { searchParams } = new URL(request.url);
-    const zone = searchParams.get('zone');
+    const zone = searchParams.get('zone')?.toLowerCase();
     const countOnly = searchParams.get('countOnly');
 
-    const query: any = { role: { $in: ['volunteer', 'vet'] }, isActive: true };
+    let volunteers: any[] = [];
+    let count = 0;
+    let dbConnected = false;
+
+    try {
+      if (process.env.MONGODB_URI) {
+        await dbConnect();
+        dbConnected = true;
+      }
+    } catch (e) {
+      console.warn('DB connection failed, falling back to mock data', e);
+    }
+
+    if (dbConnected) {
+      const query: any = { role: { $in: ['volunteer', 'vet'] }, isActive: true };
+      if (zone) {
+        query['location.zone'] = { $regex: new RegExp(zone, 'i') };
+      }
+
+      count = await User.countDocuments(query);
+      if (count > 0) {
+        if (countOnly === 'true') {
+          const samples = await User.find(query).limit(5).select('id name avatar rating servicesOffered isActive').lean();
+          return NextResponse.json({
+            total: count,
+            zone: zone || 'All',
+            volunteers: samples.map(v => ({ ...v, id: (v as any)._id.toString() }))
+          });
+        }
+
+        const dbVolunteers = await User.find(query).lean();
+        return NextResponse.json(dbVolunteers.map(v => ({ ...v, id: (v as any)._id.toString() })));
+      }
+    }
+
+    // Fallback to mock data
+    let filteredMocks = MOCK_VOLUNTEERS;
     if (zone) {
-      // Use partial match, case insensitive
-      query['location.zone'] = { $regex: new RegExp(zone, 'i') };
+      filteredMocks = filteredMocks.filter(v => v.location.zone.toLowerCase().includes(zone));
     }
 
     if (countOnly === 'true') {
-      const count = await User.countDocuments(query);
-      
-      // Get a few sample active volunteers
-      const samples = await User.find(query).limit(5).select('id name avatar rating servicesOffered isActive');
-      
       return NextResponse.json({
-        total: count,
+        total: filteredMocks.length,
         zone: zone || 'All',
-        volunteers: samples
+        volunteers: filteredMocks.slice(0, 5)
       });
     }
 
-    const volunteers = await User.find(query).lean();
-    
-    // Transform _id to id for frontend compatibility
-    const formatted = volunteers.map(v => ({...v, id: (v as any)._id.toString()}));
-    
-    return NextResponse.json(formatted);
+    return NextResponse.json(filteredMocks);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
