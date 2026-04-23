@@ -15,24 +15,24 @@ import {
 
 const FOOTER_LINKS = {
   Services: [
-    { label: 'Dog Walking',       href: '#services' },
-    { label: 'Pet Grooming',      href: '#services' },
-    { label: 'Pet Sitting',       href: '#services' },
-    { label: 'Vet Booking',       href: '#services' },
-    { label: 'Vaccination Reminders', href: '#services' },
+    { label: 'Vet Booking',       href: '/#services' },
+    { label: 'Rescue Reports',    href: '/rescue' },
+    { label: 'Adoption Market',   href: '/adoption' },
+    { label: 'Donations',         href: '/donations' },
+    { label: 'Mobile App',        href: '/app' },
   ],
   Company: [
-    { label: 'About Vetaura',  href: '#about' },
-    { label: 'How It Works',   href: '#services' },
-    { label: 'Become a Volunteer', href: '#caretakers' },
-    { label: 'Partner Clinics', href: '#services' },
-    { label: 'Pet Tips Blog',  href: '#tips' },
+    { label: 'About Vetaura',     href: '/about' },
+    { label: 'How It Works',      href: '/#services' },
+    { label: 'Our Vision',        href: '/about' },
+    { label: 'Contact Us',        href: '/contact' },
+    { label: 'Pet Tips Blog',     href: '/#tips' },
   ],
   Legal: [
     { label: 'Privacy Policy',    href: '#' },
     { label: 'Terms of Service',  href: '#' },
     { label: 'Cookie Policy',     href: '#' },
-    { label: 'Cancellation Policy', href: '#' },
+    { label: 'Impact Reports',    href: '/donations' },
   ],
 };
 

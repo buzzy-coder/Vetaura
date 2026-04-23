@@ -36,6 +36,32 @@ export async function getUserProfile(phone: string): Promise<any> {
   return res.json();
 }
 
+export async function login(data: any): Promise<any> {
+  const res = await fetch(`${BASE_URL}/api/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Login failed');
+  }
+  return res.json();
+}
+
+export async function signup(data: any): Promise<any> {
+  const res = await fetch(`${BASE_URL}/api/auth/signup`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Signup failed');
+  }
+  return res.json();
+}
+
 export async function getPetProfile(ownerId: string): Promise<PetProfile> {
   const res = await fetch(`${BASE_URL}/api/pets/${ownerId}`, { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch pet profile');

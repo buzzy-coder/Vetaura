@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Search, Calendar, MapPin, ArrowRight, Sparkles } from 'lucide-react';
+import { Search, Calendar, MapPin, ArrowRight, Sparkles, AlertCircle } from 'lucide-react';
 import FloatingPet from './FloatingPet';
 import { useModals } from '@/lib/ModalContext';
 
@@ -119,10 +119,20 @@ export default function HeroSection() {
                 className="btn-secondary"
                 whileHover={{ scale: 1.04, y: -2 }}
                 whileTap={{ scale: 0.97 }}
-                style={{ border: 'none', cursor: 'pointer' }}
+                style={{ border: 'none', cursor: 'pointer', background: 'white', color: '#2563EB', borderColor: '#2563EB' }}
               >
                 <Calendar size={17} />
                 Book a Vet
+              </motion.button>
+              <motion.button
+                onClick={() => window.location.href = '/rescue'}
+                className="btn-secondary"
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                style={{ border: 'none', cursor: 'pointer', background: '#FEF2F2', color: '#EF4444', borderColor: '#FECACA' }}
+              >
+                <AlertCircle size={17} />
+                Rescue Help
               </motion.button>
             </motion.div>
 

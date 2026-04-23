@@ -9,9 +9,13 @@ import { useModals } from '@/lib/ModalContext';
 import ThemeToggle from '@/components/ThemeToggle';
 
 const NAV_LINKS = [
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about' },
   { label: 'Services', href: '/#services' },
-  { label: 'Find a Caretaker', href: '/#caretakers' },
-  { label: 'Pet Tips', href: '/#tips' },
+  { label: 'Rescue', href: '/rescue' },
+  { label: 'Adoption', href: '/adoption' },
+  { label: 'Donations', href: '/donations' },
+  { label: 'App', href: '/app' },
   { label: 'Dashboard', href: '/dashboard' },
 ];
 
