@@ -6,7 +6,8 @@ export interface IUser extends Document {
   email: string;
   role: 'pet_owner' | 'volunteer' | 'vet';
   avatar?: string;
-  phone?: string;
+  phone: string;
+  password?: string;
   
   // Volunteer / Vet specific fields
   bio?: string;
@@ -37,7 +38,8 @@ const UserSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true },
     role: { type: String, enum: ['pet_owner', 'volunteer', 'vet'], required: true },
     avatar: { type: String },
-    phone: { type: String },
+    phone: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
 
     bio: { type: String },
     rating: { type: Number, default: 0 },
@@ -59,5 +61,10 @@ const UserSchema = new Schema<IUser>(
   },
   { timestamps: true }
 );
+
+// Force clear model cache in development to pick up schema changes
+if (process.env.NODE_ENV === 'development') {
+  delete mongoose.models.User;
+}
 
 export const User = (mongoose.models.User as Model<IUser>) || mongoose.model<IUser>('User', UserSchema);

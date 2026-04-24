@@ -2,20 +2,23 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, User as UserIcon, PawPrint, LogOut, Loader2, ArrowRight } from 'lucide-react';
+import { Calendar, User as UserIcon, PawPrint, LogOut, Loader2, ArrowRight, ShieldCheck, TrendingUp, FileText } from 'lucide-react';
 import Navbar from '@/components/Navbar';
-import { getUserProfile, getPetProfile, getAppointments } from '@/lib/api';
+import Link from 'next/link';
+import { getUserProfile, getPetProfile, getAppointments, login } from '@/lib/api';
 import { PetProfile, Appointment } from '@/lib/types';
 
 export default function Dashboard() {
   const [phone, setPhone] = useState('');
   const [inputPhone, setInputPhone] = useState('');
+  const [inputPassword, setInputPassword] = useState('');
   
   const [user, setUser] = useState<any>(null);
   const [pet, setPet] = useState<PetProfile | null>(null);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [activeTab, setActiveTab] = useState('appointments');
 
   // Check localstorage on mount
   useEffect(() => {
@@ -60,11 +63,20 @@ export default function Dashboard() {
     loadDashboard();
   }, [phone]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputPhone) return;
-    localStorage.setItem('vetaura_phone', inputPhone);
-    setPhone(inputPhone);
+    if (!inputPhone || !inputPassword) return;
+    setLoading(true);
+    setError('');
+    try {
+      const response = await login({ phone: inputPhone, password: inputPassword });
+      localStorage.setItem('vetaura_phone', inputPhone);
+      setPhone(inputPhone);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleLogout = () => {
@@ -108,13 +120,24 @@ export default function Dashboard() {
                 onChange={(e) => setInputPhone(e.target.value)} 
                 placeholder="Phone Number" 
                 required
-                style={{ padding: '0.8rem 1rem', borderRadius: '0.75rem', border: '1px solid var(--color-border)', outline: 'none', width: '100%' }} 
+                style={{ padding: '0.8rem 1rem', borderRadius: '0.75rem', border: '1px solid var(--color-border)', outline: 'none', width: '100%', background: 'var(--color-bg-alt)', color: 'var(--color-text-primary)' }} 
+              />
+              <input 
+                type="password"
+                value={inputPassword} 
+                onChange={(e) => setInputPassword(e.target.value)} 
+                placeholder="Password" 
+                required
+                style={{ padding: '0.8rem 1rem', borderRadius: '0.75rem', border: '1px solid var(--color-border)', outline: 'none', width: '100%', background: 'var(--color-bg-alt)', color: 'var(--color-text-primary)' }} 
               />
               {error && <p style={{ color: '#EF4444', fontSize: '0.85rem', margin: 0 }}>{error}</p>}
               <button className="btn-primary" style={{ justifyContent: 'center', border: 'none', cursor: 'pointer' }}>
                 View Dashboard <ArrowRight size={16} />
               </button>
             </form>
+            <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+              Don&apos;t have an account? <Link href="/auth/signup" style={{ color: '#2563EB', fontWeight: 600 }}>Create Profile</Link>
+            </p>
           </motion.div>
         </main>
       </>
@@ -165,49 +188,151 @@ export default function Dashboard() {
             </motion.div>
           </div>
 
-          {/* Main Content (Appointments) */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ background: 'var(--color-card-bg)', borderRadius: '1.5rem', padding: '2rem', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', minHeight: '600px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Calendar color="#2563EB" /> Appointments
-              </h2>
+          {/* Main Content (Tabs) */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            
+            {/* Tabs Header */}
+            <div style={{ display: 'flex', gap: '1rem', borderBottom: '1px solid var(--color-border)', paddingBottom: '0.5rem' }}>
+              {['appointments', 'health', 'records'].map((tab) => (
+                <button 
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  style={{ 
+                    padding: '0.5rem 1rem', background: 'none', border: 'none', 
+                    borderBottom: activeTab === tab ? '2px solid #2563EB' : 'none',
+                    color: activeTab === tab ? '#2563EB' : 'var(--color-text-muted)',
+                    fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', textTransform: 'capitalize'
+                  }}
+                >
+                  {tab}
+                </button>
+              ))}
             </div>
 
-            {appointments.length === 0 ? (
-              <div style={{ padding: '4rem 0', textAlign: 'center', color: 'var(--color-text-muted)' }}>
-                <Calendar size={48} style={{ margin: '0 auto 1rem', opacity: 0.2 }} />
-                <p>You have no upcoming appointments.</p>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {appointments.map((appt) => (
-                  <div key={appt.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', border: '1px solid var(--color-border)', borderRadius: '1rem' }}>
-                    <div>
-                      <div style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--color-text-primary)', marginBottom: '0.25rem' }}>
-                        {appt.serviceType === 'checkup' ? 'Veterinary Checkup' : 
-                         appt.serviceType === 'vaccination' ? 'Vaccination' :
-                         appt.serviceType === 'grooming' ? 'Grooming' : 'Dog Walking'}
-                      </div>
-                      <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-                        {new Date(appt.scheduledAt).toLocaleString()} • {appt.address}
-                      </div>
-                    </div>
-                    <div>
-                      <span style={{ 
-                        padding: '0.4rem 0.8rem', borderRadius: '2rem', fontSize: '0.85rem', fontWeight: 600,
-                        background: appt.status === 'confirmed' ? '#DCFCE7' : appt.status === 'pending' ? '#FEF9C3' : 'var(--color-bg-alt)',
-                        color: appt.status === 'confirmed' ? '#16A34A' : appt.status === 'pending' ? '#CA8A04' : 'var(--color-text-muted)'
-                      }}>
-                        {appt.status.charAt(0).toUpperCase() + appt.status.slice(1)}
-                      </span>
-                    </div>
+            {/* Tab Content: Appointments */}
+            {activeTab === 'appointments' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ background: 'var(--color-card-bg)', borderRadius: '1.5rem', padding: '2rem', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', minHeight: '500px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Calendar color="#2563EB" /> Upcoming
+                  </h2>
+                </div>
+
+                {appointments.length === 0 ? (
+                  <div style={{ padding: '4rem 0', textAlign: 'center', color: 'var(--color-text-muted)' }}>
+                    <Calendar size={48} style={{ margin: '0 auto 1rem', opacity: 0.2 }} />
+                    <p>You have no upcoming appointments.</p>
                   </div>
-                ))}
-              </div>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    {appointments.map((appt) => (
+                      <div key={appt.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', border: '1px solid var(--color-border)', borderRadius: '1rem' }}>
+                        <div>
+                          <div style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--color-text-primary)', marginBottom: '0.25rem' }}>
+                            {appt.serviceType === 'checkup' ? 'Veterinary Checkup' : 
+                             appt.serviceType === 'vaccination' ? 'Vaccination' :
+                             appt.serviceType === 'grooming' ? 'Grooming' : 'Dog Walking'}
+                          </div>
+                          <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
+                            {new Date(appt.scheduledAt).toLocaleString()} • {appt.address}
+                          </div>
+                        </div>
+                        <div>
+                          <span style={{ 
+                            padding: '0.4rem 0.8rem', borderRadius: '2rem', fontSize: '0.85rem', fontWeight: 600,
+                            background: appt.status === 'confirmed' ? '#DCFCE7' : appt.status === 'pending' ? '#FEF9C3' : 'var(--color-bg-alt)',
+                            color: appt.status === 'confirmed' ? '#16A34A' : appt.status === 'pending' ? '#CA8A04' : 'var(--color-text-muted)'
+                          }}>
+                            {appt.status.charAt(0).toUpperCase() + appt.status.slice(1)}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
             )}
-          </motion.div>
+
+            {/* Tab Content: Health (Vaccination & Weight) */}
+            {activeTab === 'health' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                {/* Vaccination History */}
+                <div style={{ background: 'var(--color-card-bg)', borderRadius: '1.5rem', padding: '2rem', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
+                  <h3 style={{ fontWeight: 800, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <ShieldCheck size={20} color="#10B981" /> Vaccination Status
+                  </h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    {[
+                      { name: 'Rabies', date: 'Jan 12, 2024', status: 'Completed', color: '#10B981' },
+                      { name: 'DHPP', date: 'Feb 05, 2024', status: 'Completed', color: '#10B981' },
+                      { name: 'Leptospirosis', date: 'June 20, 2024', status: 'Upcoming', color: '#3B82F6' }
+                    ].map((v, i) => (
+                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', border: '1px solid var(--color-border)', borderRadius: '0.75rem' }}>
+                        <div>
+                          <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{v.name}</div>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{v.date}</div>
+                        </div>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: v.color }}>{v.status.toUpperCase()}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Weight Tracking */}
+                <div style={{ background: 'var(--color-card-bg)', borderRadius: '1.5rem', padding: '2rem', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
+                  <h3 style={{ fontWeight: 800, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <TrendingUp size={20} color="#2563EB" /> Weight Tracking (kg)
+                  </h3>
+                  {/* Mock Chart */}
+                  <div style={{ height: '150px', position: 'relative', display: 'flex', alignItems: 'flex-end', gap: '1rem', padding: '0 1rem' }}>
+                    {[12, 12.5, 13.2, 13.8, 14.2].map((w, i) => (
+                      <div key={i} style={{ flex: 1, position: 'relative' }}>
+                        <motion.div 
+                          initial={{ height: 0 }} animate={{ height: `${(w/15) * 100}%` }}
+                          style={{ background: 'linear-gradient(to top, #2563EB, #60A5FA)', borderRadius: '4px 4px 0 0', width: '100%' }}
+                        />
+                        <div style={{ position: 'absolute', top: '-25px', width: '100%', textAlign: 'center', fontSize: '0.7rem', fontWeight: 700 }}>{w}</div>
+                        <div style={{ textAlign: 'center', fontSize: '0.65rem', marginTop: '8px', color: 'var(--color-text-muted)' }}>M{i+1}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <p style={{ marginTop: '2rem', fontSize: '0.85rem', color: 'var(--color-text-muted)', textAlign: 'center' }}>
+                    {pet?.petName}&apos;s weight is within the healthy range for {pet?.breed}.
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Tab Content: Records */}
+            {activeTab === 'records' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ background: 'var(--color-card-bg)', borderRadius: '1.5rem', padding: '2rem', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', minHeight: '500px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <FileText color="#2563EB" /> Medical History
+                  </h2>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {[
+                    { type: 'General Checkup', date: 'March 15, 2024', doctor: 'Dr. Satpathy', notes: 'Overall healthy, slight tartar buildup.' },
+                    { type: 'Skin Allergy', date: 'Feb 10, 2024', doctor: 'Dr. Mishra', notes: 'Prescribed Apoquel for seasonal itching.' }
+                  ].map((rec, i) => (
+                    <div key={i} style={{ padding: '1.5rem', border: '1px solid var(--color-border)', borderRadius: '1rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                        <h4 style={{ fontWeight: 700, margin: 0 }}>{rec.type}</h4>
+                        <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{rec.date}</span>
+                      </div>
+                      <div style={{ fontSize: '0.85rem', color: '#2563EB', fontWeight: 600, marginBottom: '0.75rem' }}>{rec.doctor}</div>
+                      <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>{rec.notes}</p>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+          </div>
         </div>
       </main>
+
     </>
   );
 }
